@@ -23,7 +23,8 @@ var letras = [
             {txt:"accionista promigas.",ini:32.3,fin:34,id:19},
             {txt:"Es revisada cada 5 años",ini:34,fin:36,id:20},
             {txt:"o a necesidad de cambios",ini:36,fin:37.5,id:21},
-            {txt:"en la organización.",ini:37.5,fin:39,id:22}
+            {txt:"en la organización.",ini:37.5,fin:39,id:22},
+            {txt:"...",ini:39,fin:40.9}//entrada a la nueva pagina
         ]
     },
 

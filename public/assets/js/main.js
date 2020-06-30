@@ -67,6 +67,7 @@ function setPodcast(data){
 }
 
 function fillLines(){
+    getI('podcast-lyrics').innerHTML = ''
     for(i = 0;i<actual_lyrics[actual_parte].length;i++){
         var obj = actual_lyrics[actual_parte][i]
         var p_tag = document.createElement('p')
@@ -142,14 +143,14 @@ function animacionPodcast(){
                     fillLines()
                     getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
                     actual_lyric = 0
-                    stopPodcast()
+                    
                 }
             }else{
                 //mispa pagina pero nueva parte
                 //next parte
                 console.log("nueva parte")
                 actual_parte++
-                getI('podcast-lyrics').innerHTML = ''
+                
                 fillLines()
                 getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
                 actual_lyric = 0
@@ -161,6 +162,8 @@ function animacionPodcast(){
         
     }else{
         //pos nada
+        //probablemente es una nueva página, cambiemos el título
+
         console.log("pos nada")
     }
     
