@@ -102,6 +102,7 @@ function findRealLyric(id){
 function animacionPodcast(){
     //buscar en la db
     //reset classes
+    var a = 0
     var b = 0
     var obj_highlight = null
     var clases = getI('podcast-lyrics').getElementsByTagName('p')
@@ -109,10 +110,12 @@ function animacionPodcast(){
         clases[b].classList.remove('podcast-active-lyric')
     }
 
-    for(b = 0;b<letras[actual_page].lyrics.length;b++){
-        var obj = letras[actual_page].lyrics[b]
-        if(podcast_data.actual_seconds>=obj.ini&&podcast_data.actual_seconds<obj.fin){
-            obj_highlight = obj
+    for(a = 0;a<letras.length;a++){
+        for(b = 0;b<letras[a].lyrics.length;b++){
+            var obj = letras[a].lyrics[b]
+            if(podcast_data.actual_seconds>=obj.ini&&podcast_data.actual_seconds<obj.fin){
+                obj_highlight = obj
+            }
         }
     }
 
@@ -158,7 +161,7 @@ function animacionPodcast(){
         
     }else{
         //pos nada
-        //console.log("pos nada")
+        console.log("pos nada")
     }
     
     podcast_data.actual_seconds = audio_podcast.currentTime
