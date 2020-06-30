@@ -243,13 +243,11 @@
     position: absolute;
     width: auto;
     height: 80px;
-    margin: 0px;
+    margin: auto;
     padding: 0px;
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
     top: 20px;
-    
 }
 #podcast-title::after{
     content: "";

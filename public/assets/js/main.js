@@ -20,14 +20,22 @@ var actual_lyric = 0
 var actual_parte = 0
 var lyrics = []
 
+var animacion_title = null
 function setTitle(){
     actual_title = letras[actual_page].title
+    getI('podcast-title').style.left = '0%'
     getI('podcast-title-1').innerHTML = '<span>'+actual_title.line1+'</span>'
     getI('podcast-title-2').innerHTML = actual_title.line2
-    var width_title = getI('podcast-title').offsetWidth
-    getI('podcast-title').style.left = '50%'
-    getI('podcast-title').style.left = 'calc(50% - '+(width_title/2)+'px)'
-    getI('podcast-title').style.left = '-moz-calc(50% - '+(width_title/2)+'px)'
+    
+    //clearTimeout(animacion_title)
+    //animacion_title = setTimeout(function(){
+        //clearTimeout(animacion_title)
+        var width_title = getI('podcast-title').offsetWidth
+        console.log(width_title)
+        getI('podcast-title').style.left = '50%'
+        getI('podcast-title').style.left = 'calc(50% - '+(width_title/2)+'px)'
+        getI('podcast-title').style.left = '-moz-calc(50% - '+(width_title/2)+'px)'
+    //},1000)
 }
 
 function setPodcast(data){
@@ -58,7 +66,6 @@ function setPodcast(data){
         }
         lyrics.push(array)
     }
-
 
     podcast_data.duration = data.duration
     getI('podcast-time').innerHTML = '00:00/'+getTimeText(podcast_data.duration)
@@ -140,16 +147,24 @@ function animacionPodcast(){
             var real_actual_lyric = findRealLyric(obj_highlight.id)
             if(real_actual_lyric[0]!=actual_page){
                 //otra pagina
-                //cambia de pagina
+
                 //mirar si es la ultima pagina o no
                 if(actual_page==(letras.length-1)){
                     //es la ultima, no podemos pasar mas adelante
                 }else{
-                    console.log("aqui")
+                    actual_page++
+                
+                    setTitle()
+                    actual_lyrics = lyrics[actual_page]
+                    actual_parte = 0
+                    
+                    fillLines()
+                    getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
+                    actual_lyric = 0
                 }
             }else{
                 //mispa pagina pero nueva parte
-                //next parte
+
                 console.log("nueva parte")
                 actual_parte++
                 
@@ -158,20 +173,7 @@ function animacionPodcast(){
                 actual_lyric = 0
             }
         }else{
-            //misma parte
-            if(obj_highlight.txt=='...'){
-                //pintar titulo
-                actual_page++
-                
-                setTitle()
-                actual_lyrics = lyrics[actual_page]
-                actual_parte = 0
-                actual_lyric = 0
-                
-                fillLines()
-            }else{
-                getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
-            }
+            getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
         }
         
     }else{
@@ -230,6 +232,45 @@ function toggleSound(btn){
         audio_podcast.volume = 1
         btn.className = 'podcast-sound-btn-on'
         btn.setAttribute('status','on')
+    }
+}
+
+function clickZona(zona,event){
+    stopPodcast()
+    var posx = event.pageX
+    
+    var zona_rect = zona.getBoundingClientRect()
+    var fragmento = posx-zona_rect.left
+    var percent = (fragmento*100)/zona_rect.width
+    var segundo = (percent*podcast_data.duration)/100
+
+    var obj_highlight = null
+    for(var a = 0;a<letras.length;a++){
+        for(var b = 0;b<letras[a].lyrics.length;b++){
+            var obj = letras[a].lyrics[b]
+
+            if(segundo>=obj.ini&&segundo<obj.fin){
+                obj_highlight = obj
+            }
+        }
+    }
+    if(obj_highlight!=null){
+        var data_seg = findRealLyric(obj_highlight.id)
+
+        actual_page = data_seg[0]
+        setTitle()
+        actual_lyrics = lyrics[actual_page]
+        actual_parte = data_seg[1]
+        fillLines()
+        audio_podcast.currentTime = segundo
+        podcast_data.actual_seconds = segundo
+
+        animacionPodcast()
+    }else{
+        console.log("nada de nada")
+    }
+    if(getI('podcast-play-btn').getAttribute('status')=='playing'){
+        resumePodcast()
     }
 }
 
