@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast</title>
+    <link href="public/assets/css/fonts.css" rel="stylesheet" type="text/css" />
+    <link href="public/assets/css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="public/assets/css/main.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="public/spider/sprites/sprite.css" />
+    <link rel="stylesheet" type="text/css" href="public/spider/sprites/fotograma.css" />
+</head>
+
+<body>
+<div id="container">
+    <div id="fondo"></div>
+    <div id="personaje"></div>
+    <!--<div id="personaje" class="spd_movieclip" width="254" height="323" frames="18" src="assets/media/jugador_pasando/"></div>-->
+
+    <div id="podcast">
+        <div id="podcast-instructivo" style="display: none;">
+            <div>
+                <p>Realicemos la siguiente actividad:</p>
+                <div class="podcast-instructivo-1">
+                    <p><span>Escucha y lee con atención</span> el audio que te presentamos a continuación,</p>
+                </div>
+                <div class="podcast-instructivo-2">
+                    <p>Luego de escucharlo, <span>resolverás</span> un reto</p>
+                </div>
+                <button class="podcast-btn">Continuar</button>
+            </div>
+        </div>
+
+        <div id="podcast-interactiva" style="display: block;">
+            <div id="podcast-title">
+                <div>
+                    <p id="podcast-title-1"><span>Administración de la</span></p>
+                    <p id="podcast-title-2">estructura organizacional</p>
+                </div>
+            </div>
+
+            <div id="podcast-lyrics-wrap">
+                <div id="podcast-lyrics"><!--podcast-active-lyric-->
+                    
+                </div>
+                
+            </div>
+
+            <div id="podcast-timeline-cont">
+                <button id="podcast-play-btn" class="podcast-stop-status"></button>
+                <div id="podcast-timeline">
+                    <div id="podcast-bar"></div>
+                    <div id="podcast-pointer"></div>
+                    <div id="podcast-zone"></div>
+                </div>
+                <div id="podcast-time">00:00/00:05</div>
+                <button id="podcast-sound-btn" class="podcast-sound-btn-on"></button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script src="public/spider/sprites/sprite.js"></script>
+<script src="public/spider/sprites/fotograma.js"></script>
+<script src="public/assets/js/jquery-3.2.1.min.js"></script>
+<script src="public/assets/js/main.js"></script>
+<script src="public/data.js"></script>
+
+<script>
+    var audio_podcast = new Audio()
+    
+    window.onload = function(){
+        console.log("on ready")
+        document.body.onclick = function(){
+            document.body.onclick = null
+            audio_podcast.onloadeddata = function(){ 
+                setPodcast(this)
+            }
+            audio_podcast.src = 'public/administracion_audio_v2.mp3'
+            document.body.onclick = function(){
+                stopPodcast()
+            }
+        }
+        
+    }
+    setTitle()
+    
+</script>
+    
+</body>
+</html>
