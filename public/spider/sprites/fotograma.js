@@ -41,7 +41,8 @@ function loadFrame(url,callBack,initial,data,w,h,frames,src){
         var object = document.getElementById(data.idname)
         object.appendChild(canvas)
         
-
+        document.getElementById('cargador_txt').innerHTML = (loader_cont)+'%'
+        loader_cont+=2
         image_frame = null
         initial++
         callBack(initial,data,w,h,frames,src)
@@ -130,7 +131,7 @@ function spdPlayMovieclip(data,id){
                 setFotograma(nuevo_frame,movieclips[id].moviename)
             }
         }
-    },40)
+    },80)
 }
 
 function spdSetMovieclip(data){

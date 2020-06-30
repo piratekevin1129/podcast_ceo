@@ -15,11 +15,10 @@
 <body>
 <div id="container">
     <div id="fondo"></div>
-    <div id="personaje"></div>
-    <!--<div id="personaje" class="spd_movieclip" width="254" height="323" frames="18" src="assets/media/jugador_pasando/"></div>-->
+    <div id="personaje" class="spd_movieclip" width="283" height="428" frames="51" src="public/assets/images/personaje/"></div>
 
     <div id="podcast">
-        <div id="podcast-instructivo" style="display: none;">
+        <div id="podcast-instructivo" class="podcast-view-on">
             <div>
                 <p>Realicemos la siguiente actividad:</p>
                 <div class="podcast-instructivo-1">
@@ -28,11 +27,11 @@
                 <div class="podcast-instructivo-2">
                     <p>Luego de escucharlo, <span>resolverás</span> un reto</p>
                 </div>
-                <button class="podcast-btn">Continuar</button>
+                <button onclick="clickComenzar(this)" id="comenzar-btn" class="podcast-btn">Continuar</button>
             </div>
         </div>
 
-        <div id="podcast-interactiva" style="display: block;">
+        <div id="podcast-interactiva" class="podcast-view-off">
             <div id="podcast-title">
                 <div>
                     <p id="podcast-title-1"><span>Administración de la</span></p>
@@ -48,17 +47,20 @@
             </div>
 
             <div id="podcast-timeline-cont">
-                <button id="podcast-play-btn" class="podcast-stop-status"></button>
+                <button onclick="togglePodcast(this)" id="podcast-play-btn" class="podcast-stop-status" status="playing"></button>
                 <div id="podcast-timeline">
                     <div id="podcast-bar"></div>
                     <div id="podcast-pointer"></div>
                     <div id="podcast-zone"></div>
                 </div>
                 <div id="podcast-time">00:00/00:05</div>
-                <button id="podcast-sound-btn" class="podcast-sound-btn-on"></button>
+                <button onclick="toggleSound(this)" id="podcast-sound-btn" class="podcast-sound-btn-on" status="on"></button>
             </div>
         </div>
         
+    </div>
+    <div id="cargador" class="cargador_on">
+        <p id="cargador_txt">Cargando...</p>
     </div>
 </div>
 
@@ -70,22 +72,52 @@
 
 <script>
     var audio_podcast = new Audio()
+    var loader_cont = 0
+    var animacion_personaje = null
     
     window.onload = function(){
-        console.log("on ready")
-        document.body.onclick = function(){
-            document.body.onclick = null
+        spdCreateMovieClip({idname:'personaje',callBack:function(){
+            console.log("on ready")
+            spdCreateMovieClipAnimation({id:0,moviename:'personaje'})
+            getI('cargador').className = 'cargador_off'
+
+            spdPlayMovieclip({frame:1,stop:0,loop:false},0)
+            animacion_personaje = setInterval(function(){
+                spdPlayMovieclip({frame:1,stop:0,loop:false},0)
+            },10000)
+            
+        
             audio_podcast.onloadeddata = function(){ 
-                setPodcast(this)
+                getI('comenzar-btn').style.visibility = 'visible'
+            }
+            audio_podcast.onended = function(){
+                setPodcast()
+                getI('podcast-play-btn').className = 'podcast-reload-status'
+                getI('podcast-play-btn').setAttribute('status','repeat')
             }
             audio_podcast.src = 'public/administracion_audio_v2.mp3'
-            document.body.onclick = function(){
-                stopPodcast()
-            }
-        }
+        }})
         
     }
-    setTitle()
+
+    var animacion_comenzar = null
+    function clickComenzar(btn){
+        btn.disabled = true
+        getI('podcast-instructivo').className = 'podcast-view-off'
+        animacion_comenzar = setTimeout(function(){
+            clearTimeout(animacion_comenzar)
+            animacion_comenzar = null
+
+            getI('podcast-interactiva').className = 'podcast-view-on'
+            setTitle()
+            animacion_comenzar = setTimeout(function(){
+                clearTimeout(animacion_comenzar)
+                animacion_comenzar = null
+
+                setPodcast(audio_podcast)
+            },500)
+        },500)    
+    }
     
 </script>
     

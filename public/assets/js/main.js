@@ -12,7 +12,7 @@ var podcast_data = {
     limit:9
 }
 
-var actual_title = 0
+var actual_title = ""
 var actual_lyrics = []
 
 var actual_page = 0
@@ -31,6 +31,12 @@ function setTitle(){
 }
 
 function setPodcast(data){
+    actual_title = ""
+    actual_lyrics = []
+    actual_lyric = 0
+    actual_parte = 0
+    lyrics = []
+
     for(i = 0;i<letras.length;i++){
         j = 0
         k = 0
@@ -54,15 +60,15 @@ function setPodcast(data){
     }
 
 
-    podcast_data.duration = getTimeText(data.duration)
-    getI('podcast-time').innerHTML = '00:00/'+podcast_data.duration
+    podcast_data.duration = data.duration
+    getI('podcast-time').innerHTML = '00:00/'+getTimeText(podcast_data.duration)
 
     actual_lyrics = lyrics[actual_page]
     actual_parte = 0
     fillLines()
 
     audio_podcast.play()
-    animacion_podcast = setInterval(animacionPodcast,100)
+    animacion_podcast = setInterval(animacionPodcast,50)
     //console.log(lyrics)
 }
 
@@ -72,7 +78,12 @@ function fillLines(){
         var obj = actual_lyrics[actual_parte][i]
         var p_tag = document.createElement('p')
         p_tag.id = 'lyric_'+obj.id
-        p_tag.innerHTML = obj.txt
+        if(obj.txt!="..."){
+            p_tag.innerHTML = obj.txt
+        }else{
+            p_tag.innerHTML = ""
+        }
+        
         getI('podcast-lyrics').appendChild(p_tag)
     }
 }
@@ -86,6 +97,7 @@ function findLyric(id){
     }
     return pos
 }
+
 function findRealLyric(id){
     var pos = null
     for(i = 0;i<lyrics.length;i++){
@@ -128,22 +140,12 @@ function animacionPodcast(){
             var real_actual_lyric = findRealLyric(obj_highlight.id)
             if(real_actual_lyric[0]!=actual_page){
                 //otra pagina
-                console.log("cambia pagina")
                 //cambia de pagina
                 //mirar si es la ultima pagina o no
                 if(actual_page==(letras.length-1)){
                     //es la ultima, no podemos pasar mas adelante
                 }else{
-                    actual_page++
-                    
-                    setTitle()
-                    actual_lyrics = lyrics[actual_page]
-                    actual_parte = 0
-                    
-                    fillLines()
-                    getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
-                    actual_lyric = 0
-                    
+                    console.log("aqui")
                 }
             }else{
                 //mispa pagina pero nueva parte
@@ -157,21 +159,78 @@ function animacionPodcast(){
             }
         }else{
             //misma parte
-            getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
+            if(obj_highlight.txt=='...'){
+                //pintar titulo
+                actual_page++
+                
+                setTitle()
+                actual_lyrics = lyrics[actual_page]
+                actual_parte = 0
+                actual_lyric = 0
+                
+                fillLines()
+            }else{
+                getI('lyric_'+obj_highlight.id).className = 'podcast-active-lyric'
+            }
         }
         
     }else{
         //pos nada
-        //probablemente es una nueva página, cambiemos el título
-
-        console.log("pos nada")
     }
     
     podcast_data.actual_seconds = audio_podcast.currentTime
+    var percent_bar = (podcast_data.actual_seconds*100)/podcast_data.duration
+    getI('podcast-pointer').style.left = percent_bar+'%'
+    getI('podcast-time').innerHTML = getTimeText(podcast_data.actual_seconds)+'/'+getTimeText(podcast_data.duration)
 }
+
 function stopPodcast(){
     audio_podcast.pause()
     clearInterval(animacion_podcast)
+}
+function resumePodcast(){
+    audio_podcast.play()
+    animacion_podcast = setInterval(animacionPodcast,50)
+}
+function reloadPodcast(){
+    actual_page = 0
+    setTitle()
+    setPodcast(audio_podcast)
+}
+
+function togglePodcast(btn){
+    var clase = btn.getAttribute('status')
+    if(clase=='playing'){
+        //reproduciendo
+        stopPodcast()
+        btn.className = 'podcast-play-status'
+        btn.setAttribute('status','stopped')
+    }else if(clase=='stopped'){
+        //parado
+        resumePodcast()
+        btn.className = 'podcast-stop-status'
+        btn.setAttribute('status','playing')
+    }else if(clase=='repeat'){
+        reloadPodcast()
+        btn.className = 'podcast-stop-status'
+        btn.setAttribute('status','playing')
+    }
+}
+
+var actual_volumen = 1
+function toggleSound(btn){
+    var clase = btn.getAttribute('status')
+    if(clase=='on'){
+        actual_volumen = 0
+        audio_podcast.volume = 0
+        btn.className = 'podcast-sound-btn-off'
+        btn.setAttribute('status','off')
+    }else{
+        actual_volumen = 1
+        audio_podcast.volume = 1
+        btn.className = 'podcast-sound-btn-on'
+        btn.setAttribute('status','on')
+    }
 }
 
 function getI(idname){
