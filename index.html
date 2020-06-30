@@ -91,7 +91,7 @@
                 getI('comenzar-btn').style.visibility = 'visible'
             }
             audio_podcast.onended = function(){
-                setPodcast()
+                stopPodcast()
                 getI('podcast-play-btn').className = 'podcast-reload-status'
                 getI('podcast-play-btn').setAttribute('status','repeat')
             }
