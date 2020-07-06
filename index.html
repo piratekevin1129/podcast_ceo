@@ -20,13 +20,13 @@
     <div id="podcast">
         <div id="podcast-instructivo" class="podcast-view-on">
             <div>
-                <p>Realicemos la siguiente actividad:</p>
+                <p>Para realizar la siguiente actividad:</p>
                 <div class="podcast-instructivo-1">
-                    <p><span>Escucha y lee con atención</span> el audio que te presentamos a continuación,</p>
+                    <p><span>Escucha con atención el audio</span> o lee el contenido que te presentamos a continuación.</p>
                 </div>
-                <div class="podcast-instructivo-2">
+                <!--<div class="podcast-instructivo-2">
                     <p>Luego de escucharlo, <span>resolverás</span> un reto</p>
-                </div>
+                </div>-->
                 <button onclick="clickComenzar(this)" id="comenzar-btn" class="podcast-btn">Continuar</button>
             </div>
         </div>
@@ -72,6 +72,7 @@
 
 <script>
     var audio_podcast = new Audio()
+    var audio_instrucciones = new Audio()
     var loader_cont = 0
     var animacion_personaje = null
     
@@ -79,13 +80,22 @@
         spdCreateMovieClip({idname:'personaje',callBack:function(){
             console.log("on ready")
             spdCreateMovieClipAnimation({id:0,moviename:'personaje'})
-            getI('cargador').className = 'cargador_off'
+            getI('cargador_txt').innerHTML = 'Cargando audio...'
 
             spdPlayMovieclip({frame:1,stop:0,loop:false},0)
             animacion_personaje = setInterval(function(){
                 spdPlayMovieclip({frame:1,stop:0,loop:false},0)
             },10000)
             
+            audio_instrucciones.onloadeddata = function(){
+                getI('cargador_txt').innerHTML = 'Haz clic para comenzar'
+                getI('cargador').onclick = function(){
+                    getI('cargador').className = 'cargador_off'
+                    audio_instrucciones.play()
+                }
+                
+            }
+            audio_instrucciones.src = 'public/instrucciones.mp3'
         
             audio_podcast.onloadeddata = function(){ 
                 getI('comenzar-btn').style.visibility = 'visible'
@@ -103,6 +113,8 @@
     var animacion_comenzar = null
     function clickComenzar(btn){
         btn.disabled = true
+        audio_instrucciones.pause()
+        audio_instrucciones.currentTime = 0
         getI('podcast-instructivo').className = 'podcast-view-off'
         animacion_comenzar = setTimeout(function(){
             clearTimeout(animacion_comenzar)

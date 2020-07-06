@@ -23,18 +23,32 @@ var lyrics = []
 var animacion_title = null
 function setTitle(){
     actual_title = letras[actual_page].title
-    getI('podcast-title').style.left = '0%'
-    getI('podcast-title-1').innerHTML = '<span>'+actual_title.line1+'</span>'
-    getI('podcast-title-2').innerHTML = actual_title.line2
+    getI('podcast-title').style.top = '-50px'
+    getI('podcast-title').style.opacity = '0'
+
+    clearTimeout(animacion_title)
+    animacion_title = null
+
+    animacion_title = setTimeout(function(){
+        clearTimeout(animacion_title)
+        animacion_title = null
+
+        getI('podcast-title').style.left = '0%'
+        getI('podcast-title-1').innerHTML = '<span>'+actual_title.line1+'</span>'
+        getI('podcast-title-2').innerHTML = actual_title.line2
+        var width_title = getI('podcast-title').offsetWidth
+        getI('podcast-title').style.left = '50%'
+        getI('podcast-title').style.left = 'calc(50% - '+(width_title/2)+'px)'
+        getI('podcast-title').style.left = '-moz-calc(50% - '+(width_title/2)+'px)'
+
+        getI('podcast-title').style.top = '20px'
+        getI('podcast-title').style.opacity = '1'
+    },300)
     
     //clearTimeout(animacion_title)
     //animacion_title = setTimeout(function(){
         //clearTimeout(animacion_title)
-        var width_title = getI('podcast-title').offsetWidth
-        console.log(width_title)
-        getI('podcast-title').style.left = '50%'
-        getI('podcast-title').style.left = 'calc(50% - '+(width_title/2)+'px)'
-        getI('podcast-title').style.left = '-moz-calc(50% - '+(width_title/2)+'px)'
+        
     //},1000)
 }
 
