@@ -15,7 +15,8 @@
 <body>
 <div id="container">
     <div id="fondo"></div>
-    <div id="personaje" class="spd_movieclip" width="283" height="428" frames="51" src="public/assets/images/personaje/"></div>
+    <div id="notas" class="spd_movieclip" width="178" height="150" frames="32" src="public/assets/images/notas/"></div>
+    <div id="personaje" class="spd_movieclip" width="283" height="428" frames="32" src="public/assets/images/personaje/"></div>
 
     <div id="podcast">
         <div id="podcast-instructivo" class="podcast-view-on">
@@ -74,12 +75,15 @@
     var audio_podcast = new Audio()
     var audio_instrucciones = new Audio()
     var loader_cont = 0
+    var loader_i = Math.floor((100/64)*10)/10
     var animacion_personaje = null
     
     window.onload = function(){
         spdCreateMovieClip({idname:'personaje',callBack:function(){
+        spdCreateMovieClip({idname:'notas',callBack:function(){
             console.log("on ready")
             spdCreateMovieClipAnimation({id:0,moviename:'personaje'})
+            spdCreateMovieClipAnimation({id:1,moviename:'notas'})
             getI('cargador_txt').innerHTML = 'Cargando audio...'
 
             
@@ -90,6 +94,7 @@
                     audio_instrucciones.play()
 
                     spdPlayMovieclip({frame:1,stop:0,loop:false},0)
+                    spdPlayMovieclip({frame:1,stop:0,loop:true},1)
                     animacion_personaje = setInterval(function(){
                         spdPlayMovieclip({frame:1,stop:0,loop:false},0)
                     },10000)
@@ -107,6 +112,7 @@
                 getI('podcast-play-btn').setAttribute('status','repeat')
             }
             audio_podcast.src = 'public/administracion_audio_v2.mp3'
+        }})
         }})
         
     }

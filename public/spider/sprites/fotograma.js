@@ -41,8 +41,9 @@ function loadFrame(url,callBack,initial,data,w,h,frames,src){
         var object = document.getElementById(data.idname)
         object.appendChild(canvas)
         
-        document.getElementById('cargador_txt').innerHTML = (loader_cont)+'%'
-        loader_cont+=2
+        document.getElementById('cargador_txt').innerHTML = (Math.round(loader_cont))+'%'
+        loader_cont+=loader_i
+
         image_frame = null
         initial++
         callBack(initial,data,w,h,frames,src)

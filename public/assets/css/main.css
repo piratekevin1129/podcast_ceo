@@ -65,6 +65,15 @@
     margin: 0px;
     padding: 0px;
 }
+#notas{
+    position: absolute;
+    width: 178px;
+    height: 150px;
+    top: 33%;
+    left: 15%;
+    margin: 0px;
+    padding: 0px;
+}
 
 #podcast{
     position: absolute;
@@ -219,14 +228,48 @@
     border: none;
     cursor: pointer;
 
-    transition: background-color 0.3s, box-shadow 0.3s;
-    -webkit-transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background-color 0.75s;
+    -webkit-transition: background-color 0.75s;
 }
 .podcast-btn:hover{
-    box-shadow: 0px 12px 10px -5px rgba(0,0,0,0.5);
-    background-color: #E2ED06;
+    animation: animacion-btn;
+    animation-duration: 0.75s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    -webkit-animation: animacion-btn;
+    -webkit-animation-duration: 0.75s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+    /*box-shadow: 0px 12px 10px -5px rgba(0,0,0,0.5);*/
+    background-color: #FFFFFF;
 }
-                
+
+@keyframes animacion-btn{
+    0% {
+        transform: translateY(0%);
+    }
+    14% {
+        transform: translateY(10%);
+    }
+    28% {
+        transform: translateY(-10%);
+    }
+    42% {
+        transform: translateY(6%);
+    }
+    56% {
+        transform: translateY(-6%);
+    }
+    70% {
+        transform: translateY(2%);
+    }
+    84% {
+        transform: translateY(-2%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
 
 #podcast-interactiva{
     position: absolute;
