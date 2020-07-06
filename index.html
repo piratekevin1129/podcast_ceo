@@ -82,16 +82,17 @@
             spdCreateMovieClipAnimation({id:0,moviename:'personaje'})
             getI('cargador_txt').innerHTML = 'Cargando audio...'
 
-            spdPlayMovieclip({frame:1,stop:0,loop:false},0)
-            animacion_personaje = setInterval(function(){
-                spdPlayMovieclip({frame:1,stop:0,loop:false},0)
-            },10000)
             
             audio_instrucciones.onloadeddata = function(){
                 getI('cargador_txt').innerHTML = 'Haz clic para comenzar'
                 getI('cargador').onclick = function(){
                     getI('cargador').className = 'cargador_off'
                     audio_instrucciones.play()
+
+                    spdPlayMovieclip({frame:1,stop:0,loop:false},0)
+                    animacion_personaje = setInterval(function(){
+                        spdPlayMovieclip({frame:1,stop:0,loop:false},0)
+                    },10000)
                 }
                 
             }
